@@ -60,7 +60,7 @@ module "vpc_link" {
   source = "./modules/vpc-link"
 
   name            = "ab94c2a377c524a729a50c2e47f4dadd"
-  target_nlb_arns = ["arn:aws:elasticloadbalancing:us-east-1:960227058929:loadbalancer/net/ab94c2a377c524a729a50c2e47f4dadd/fb80d41788fcc035"]
+  target_nlb_arns = var.vpc_link_target_nlb_arns
 
   tags = {
     Environment = "dev"
@@ -86,7 +86,7 @@ module "api_gateway" {
 
   enable_vpc_link           = true
   vpc_link_id               = module.vpc_link.vpc_link_id
-  vpc_link_backend_base_url = "http://ab94c2a377c524a729a50c2e47f4dadd-fb80d41788fcc035.elb.us-east-1.amazonaws.com"
+  vpc_link_backend_base_url = var.vpc_link_backend_base_url
 
   depends_on = [module.lambda_functions, module.cognito, module.vpc_link]
 }
