@@ -75,9 +75,9 @@ module "vpc_link" {
 module "api_gateway" {
   source = "./modules/api-gateway"
 
-  api_gateway_name        = "auth-api"
-  api_gateway_description = "Authentication API"
-  api_gateway_stage_name  = "dev"
+  api_gateway_name        = "fiap-soat"
+  api_gateway_description = "Application API"
+  api_gateway_stage_name  = "prod"
 
   api_gateway_lambda_functions = module.lambda_functions
 
