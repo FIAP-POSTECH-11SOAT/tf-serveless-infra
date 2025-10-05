@@ -1,6 +1,6 @@
-variable "vpc_link_target_nlb_arns" {
+variable "vpc_link_target_nlb_arn" {
   description = "EKS NLB ARN for VPC Link"
-  type        = list(string)
+  type        = string
 }
 
 variable "vpc_link_backend_base_url" {

@@ -60,7 +60,7 @@ module "vpc_link" {
   source = "./modules/vpc-link"
 
   name            = "ab94c2a377c524a729a50c2e47f4dadd"
-  target_nlb_arns = var.vpc_link_target_nlb_arns
+  target_nlb_arns = [var.vpc_link_target_nlb_arn]
 
   tags = {
     Environment = "dev"
