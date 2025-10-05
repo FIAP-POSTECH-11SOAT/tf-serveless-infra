@@ -383,17 +383,10 @@ resource "aws_api_gateway_integration_response" "ping_options_integration_respon
 # PROXY protegido para backend EKS via VPC LINK
 #   Rota: /app/{proxy+}
 # ================================
-resource "aws_api_gateway_resource" "app" {
-  count       = var.enable_vpc_link ? 1 : 0
-  rest_api_id = aws_api_gateway_rest_api.api.id
-  parent_id   = aws_api_gateway_rest_api.api.root_resource_id
-  path_part   = "app"
-}
-
 resource "aws_api_gateway_resource" "app_proxy" {
   count       = var.enable_vpc_link ? 1 : 0
   rest_api_id = aws_api_gateway_rest_api.api.id
-  parent_id   = aws_api_gateway_resource.app[0].id
+  parent_id   = aws_api_gateway_rest_api.api.root_resource_id
   path_part   = "{proxy+}"
 }
 
@@ -434,7 +427,7 @@ resource "aws_api_gateway_integration" "app_any_integration" {
 resource "aws_api_gateway_method" "app_options" {
   count         = var.enable_vpc_link ? 1 : 0
   rest_api_id   = aws_api_gateway_rest_api.api.id
-  resource_id   = aws_api_gateway_resource.app[0].id
+  resource_id   = aws_api_gateway_resource.app_proxy[0].id
   http_method   = "OPTIONS"
   authorization = "NONE"
 }
@@ -442,7 +435,7 @@ resource "aws_api_gateway_method" "app_options" {
 resource "aws_api_gateway_integration" "app_options_integration" {
   count       = var.enable_vpc_link ? 1 : 0
   rest_api_id = aws_api_gateway_rest_api.api.id
-  resource_id = aws_api_gateway_resource.app[0].id
+  resource_id = aws_api_gateway_resource.app_proxy[0].id
   http_method = aws_api_gateway_method.app_options[0].http_method
   type        = "MOCK"
 
@@ -454,7 +447,7 @@ resource "aws_api_gateway_integration" "app_options_integration" {
 resource "aws_api_gateway_method_response" "app_options_200" {
   count       = var.enable_vpc_link ? 1 : 0
   rest_api_id = aws_api_gateway_rest_api.api.id
-  resource_id = aws_api_gateway_resource.app[0].id
+  resource_id = aws_api_gateway_resource.app_proxy[0].id
   http_method = aws_api_gateway_method.app_options[0].http_method
   status_code = "200"
 
@@ -468,7 +461,7 @@ resource "aws_api_gateway_method_response" "app_options_200" {
 resource "aws_api_gateway_integration_response" "app_options_integration_response" {
   count       = var.enable_vpc_link ? 1 : 0
   rest_api_id = aws_api_gateway_rest_api.api.id
-  resource_id = aws_api_gateway_resource.app[0].id
+  resource_id = aws_api_gateway_resource.app_proxy[0].id
   http_method = aws_api_gateway_method.app_options[0].http_method
   status_code = aws_api_gateway_method_response.app_options_200[0].status_code
 
@@ -564,7 +557,6 @@ resource "aws_api_gateway_deployment" "api_deployment" {
       aws_api_gateway_integration_response.ping_options_integration_response.id,
       ],
       # blocos opcionais via splat (viram [] quando count=0)
-      aws_api_gateway_resource.app[*].id,
       aws_api_gateway_resource.app_proxy[*].id,
       aws_api_gateway_method.app_any[*].id,
       aws_api_gateway_integration.app_any_integration[*].id,
