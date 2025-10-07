@@ -11,7 +11,7 @@ module "cognito" {
 
   user_pool_name         = "my-app-users"
   app_client_name        = "my-app-spa"
-  authenticated_role_arn = "arn:aws:iam::851725235850:role/LabRole"
+  authenticated_role_arn = "arn:aws:iam::851725206083:role/LabRole"
 
   callback_urls = [
     "http://localhost:3000/callback"
