@@ -7,7 +7,7 @@ data "archive_file" "lambda_zip" {
 resource "aws_lambda_function" "lambda" {
   filename      = data.archive_file.lambda_zip.output_path
   function_name = var.lambda_function_name
-  role          = "arn:aws:iam::960227058929:role/LabRole"
+  role          = "arn:aws:iam::851725235850:role/LabRole"
   handler       = "index.handler"
   runtime       = "nodejs22.x"
   timeout       = 30
