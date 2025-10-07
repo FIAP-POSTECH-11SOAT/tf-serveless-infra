@@ -11,7 +11,7 @@ terraform {
   }
 
   backend "s3" {
-    bucket  = "rmsterraformstatefiap"
+    bucket  = "rmsterraformstate-0610"
     key     = "infra/prod/serverless/terraform.tfstate"
     region  = "us-east-1"
     encrypt = true
